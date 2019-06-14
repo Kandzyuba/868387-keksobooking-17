@@ -48,10 +48,10 @@ var generateData = function () {
         x: getRandomInRange(MOCK.arrowPin.location.x.min, MOCK.arrowPin.location.x.max),
         y: getRandomInRange(MOCK.arrowPin.location.y.min, MOCK.arrowPin.location.y.max)
       },
-    }
+    };
   }
 
-    return arrowPin;
+  return arrowPin;
 };
 
 var data = generateData();
