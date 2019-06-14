@@ -7,55 +7,62 @@ var similarListElement = map.querySelector('.map__pins');
 
 var mapTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-var POINT_WIDTH = 75;
-var POINT_HEIGHT = 87;
-// 75x65 + 10x22
-
 var MOCK = {
   arrowPin: {
     author: {
-      avatar: ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'],
+      avatar: 'img/avatars/user0',
     },
     offer: {
       type: ['palace', 'flat', 'house', 'bungalo'],
     },
     location: {
-      x: Math.floor(Math.random() * (855 - POINT_WIDTH / 2) + POINT_WIDTH / 2),
-      y: Math.floor(Math.random() * (631 - 130 + POINT_HEIGHT) + 130 + POINT_HEIGHT)
+      x: {
+        min: 150,
+        max: 1000
+      },
+      y: {
+        min: 300,
+        max: 630
+      }
     }
   },
 };
 
-var generateArrow = function () {
+var getRandomInRange = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// Функция генерации данных для пина
+var generateData = function () {
   var arrowPin = [];
 
   for (var i = 1; i < 9; i++) {
     arrowPin[i] = {
       author: {
-        avatar: MOCK.arrowPin.author.avatar[Math.floor(Math.random() * ((MOCK.arrowPin.author.avatar.length - 1) - 0 + 1))],
+        avatar: MOCK.arrowPin.author.avatar + i + '.png',
       },
       offer: {
         type: MOCK.arrowPin.offer.type[Math.floor(Math.random() * ((MOCK.arrowPin.offer.type.length - 1) - 0 + 1))],
       },
       location: {
-        x: '"left: ' + Math.floor(Math.random() * (855 - POINT_WIDTH / 2) + POINT_WIDTH / 2) + 'px; ',
-        y: 'top: ' + Math.floor(Math.random() * (631 - 130 + POINT_HEIGHT) + 130 + POINT_HEIGHT) + 'px;"'
+        x: getRandomInRange(MOCK.arrowPin.location.x.min, MOCK.arrowPin.location.x.max),
+        y: getRandomInRange(MOCK.arrowPin.location.y.min, MOCK.arrowPin.location.y.max)
       },
     }
   }
 
     return arrowPin;
-
 };
 
-var data = generateArrow();
+var data = generateData();
 
 // Создание DOM элемента
 var createPin = function (arrowPin) {
   var mapElement = mapTemplate.cloneNode(true);
 
   mapElement.querySelector('img').src = arrowPin.author.avatar;
-  mapElement.querySelector('.map__pin').style = arrowPin.location.x + arrowPin.location.y;
+  mapElement.style.left = arrowPin.location.x + 'px';
+  mapElement.style.top = arrowPin.location.y + 'px';
   mapElement.querySelector('img').alt = arrowPin.offer.type;
 
   return mapElement;
