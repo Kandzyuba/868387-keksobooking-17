@@ -8,7 +8,7 @@ var similarListElement = map.querySelector('.map__pins');
 var mapTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var MOCK = {
-  arrowPin: {
+  dataArr: {
     author: {
       avatar: 'img/avatars/user0',
     },
@@ -34,42 +34,42 @@ var getRandomInRange = function (min, max) {
 
 // Функция генерации данных для пина
 var generateData = function () {
-  var arrowPin = [];
+  var dataArr = [];
 
   for (var i = 1; i < 9; i++) {
-    arrowPin[i] = {
+    dataArr[i] = {
       author: {
-        avatar: MOCK.arrowPin.author.avatar + i + '.png',
+        avatar: MOCK.dataArr.author.avatar + i + '.png',
       },
       offer: {
-        type: MOCK.arrowPin.offer.type[Math.floor(Math.random() * ((MOCK.arrowPin.offer.type.length - 1) - 0 + 1))],
+        type: MOCK.dataArr.offer.type[getRandomInRange(0, MOCK.dataArr.offer.type.length - 1)]
       },
       location: {
-        x: getRandomInRange(MOCK.arrowPin.location.x.min, MOCK.arrowPin.location.x.max),
-        y: getRandomInRange(MOCK.arrowPin.location.y.min, MOCK.arrowPin.location.y.max)
+        x: getRandomInRange(MOCK.dataArr.location.x.min, MOCK.dataArr.location.x.max),
+        y: getRandomInRange(MOCK.dataArr.location.y.min, MOCK.dataArr.location.y.max)
       },
     };
   }
 
-  return arrowPin;
+  return dataArr;
 };
 
 var data = generateData();
 
 // Создание DOM элемента
-var createPin = function (arrowPin) {
+var createPin = function (dataArr) {
   var mapElement = mapTemplate.cloneNode(true);
 
-  mapElement.querySelector('img').src = arrowPin.author.avatar;
-  mapElement.style.left = arrowPin.location.x + 'px';
-  mapElement.style.top = arrowPin.location.y + 'px';
-  mapElement.querySelector('img').alt = arrowPin.offer.type;
+  mapElement.querySelector('img').src = dataArr.author.avatar;
+  mapElement.style.left = dataArr.location.x + 'px';
+  mapElement.style.top = dataArr.location.y + 'px';
+  mapElement.querySelector('img').alt = dataArr.offer.type;
 
   return mapElement;
 };
 
 // Заполнение блока элементами
-var appendPin = function () {
+var renderPin = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 1; i < data.length; i++) {
@@ -78,4 +78,4 @@ var appendPin = function () {
   similarListElement.appendChild(fragment);
 };
 
-appendPin();
+renderPin();
