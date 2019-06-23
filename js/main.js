@@ -1,12 +1,34 @@
 'use strict';
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
+var adForm = document.querySelector('.ad-form');
 var similarListElement = map.querySelector('.map__pins');
-
 var mapTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
+// Неактивное состояние формы
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
+var mapFilters = map.querySelectorAll('.map__filter');
+
+var addAttr = function (formElements, name, value) {
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].setAttribute(name, value);
+  }
+};
+
+var removeAttr = function (formElements, name) {
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].removeAttribute(name);
+  }
+};
+
+var inactivePage = function () {
+  addAttr(adFormFieldsets, 'disabled', true);
+  addAttr(mapFilters, 'disabled', true);
+};
+
+inactivePage();
+
+// Подготовка МОКОв
 var MOCK = {
   dataArr: {
     author: {
@@ -69,13 +91,42 @@ var createPin = function (dataArr) {
 };
 
 // Заполнение блока элементами
-var renderPin = function () {
-  var fragment = document.createDocumentFragment();
+var fragment = document.createDocumentFragment();
 
-  for (var i = 1; i < data.length; i++) {
-    fragment.appendChild(createPin(data[i]));
-  }
-  similarListElement.appendChild(fragment);
+for (var i = 1; i < data.length; i++) {
+  fragment.appendChild(createPin(data[i]));
+}
+
+var renderPins = function (node, elements) {
+  node.appendChild(elements);
 };
 
-renderPin();
+// Активация формы
+var pinMain = map.querySelector('.map__pin--main');
+var address = adForm.querySelector('#address');
+var pinPosition = {
+  x: parseInt(pinMain.style.left, 10),
+  y: parseInt(pinMain.style.top, 10)
+};
+
+var addAdressValue = function (x, y) {
+  address.value = x + ', ' + y;
+};
+
+addAdressValue(pinPosition.x, pinPosition.y);
+
+var activePage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  removeAttr(adFormFieldsets, 'disabled');
+  removeAttr(mapFilters, 'disabled');
+  renderPins(similarListElement, fragment);
+};
+
+pinMain.addEventListener('click', function () {
+  activePage();
+});
+
+pinMain.addEventListener('mouseup', function () {
+  addAdressValue(pinPosition.x, pinPosition.y);
+});
