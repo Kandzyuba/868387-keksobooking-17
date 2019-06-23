@@ -165,5 +165,3 @@ timeout.addEventListener('change', function () {
 
   time(timein, timeoutIndex);
 });
-
-console.log(address.value);
