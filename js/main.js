@@ -130,3 +130,38 @@ pinMain.addEventListener('click', function () {
 pinMain.addEventListener('mouseup', function () {
   addAdressValue(pinPosition.x, pinPosition.y);
 });
+
+// Валидация формы
+var price = adForm.querySelector('#price');
+var type = adForm.querySelector('#type');
+var minCost = ['0', '1000', '5000', '10000'];
+
+type.addEventListener('change', function () {
+  var typeIndex = type.options.selectedIndex;
+
+  var nightPrice = function (index) {
+    price.placeholder = minCost[index];
+    price.min = minCost[index];
+  };
+
+  nightPrice(typeIndex);
+});
+
+var timein = adForm.querySelector('#timein');
+var timeout = adForm.querySelector('#timeout');
+
+var time = function (node, index) {
+  node.options[index].selected = true;
+};
+
+timein.addEventListener('change', function () {
+  var timeinIndex = timein.options.selectedIndex;
+
+  time(timeout, timeinIndex);
+});
+
+timeout.addEventListener('change', function () {
+  var timeoutIndex = timeout.options.selectedIndex;
+
+  time(timein, timeoutIndex);
+});
