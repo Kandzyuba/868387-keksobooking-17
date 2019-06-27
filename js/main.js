@@ -123,10 +123,6 @@ var activePage = function () {
   renderPins(similarListElement, fragment);
 };
 
-pinMain.addEventListener('mouseup', function () {
-
-});
-
 // Валидация формы
 var price = adForm.querySelector('#price');
 var type = adForm.querySelector('#type');
@@ -203,6 +199,8 @@ pinMain.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
+
+    addAdressValue(parseInt(pinMain.style.left, 10), parseInt(pinMain.style.top, 10));
 
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
