@@ -55,7 +55,7 @@ var getRandomInRange = function (min, max) {
 };
 
 // Функция генерации данных для пина
-var generateData = function () {
+window.generateData = function () {
   var dataArr = [];
 
   for (var i = 1; i < 9; i++) {
@@ -76,7 +76,7 @@ var generateData = function () {
   return dataArr;
 };
 
-var data = generateData();
+var data = window.generateData();
 
 // Создание DOM элемента
 var createPin = function (dataArr) {
