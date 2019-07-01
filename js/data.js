@@ -1,51 +1,64 @@
 'use strict';
 
+// Загрузка данных с сервера
 (function () {
-  // Подготовка МОКОв
-  var MOCK = {
-    dataArr: {
-      author: {
-        avatar: 'img/avatars/user0',
-      },
-      offer: {
-        type: ['palace', 'flat', 'house', 'bungalo'],
-      },
-      location: {
-        x: {
-          min: 150,
-          max: 1000
-        },
-        y: {
-          min: 300,
-          max: 630
-        }
+  var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
+
+  window.load = function (onSuccess, onError) {
+    var URL = 'https://js.dump.academy/keksobooking/data';
+    var xhr = new XMLHttpRequest();
+
+    xhr.addEventListener('load', function () {
+      var error;
+
+      switch (xhr.status) {
+        case 200:
+          onSuccess(xhr.response);
+          break;
+        case 400:
+          error = 'Неверный запрос';
+          break;
+        case 401:
+          error = 'Пользователь не авторизован';
+          break;
+        case 404:
+          error = 'Ничего не найдено';
+          break;
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
       }
-    },
+
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.responseType = 'json';
+    xhr.open('GET', URL);
+    xhr.send();
   };
 
-  var getRandomInRange = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  // Отправка данных формы на сервер
+  window.upload = function (data, onSuccess) {
+    var URL = 'https://js.dump.academy/keksobooking';
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      onSuccess(xhr.response);
+    });
+
+    xhr.open('POST', URL);
+    xhr.send(data);
   };
 
-  // Функция генерации данных для пина
-  window.generateData = function () {
-    var dataArr = [];
+  var adForm = document.querySelector('.ad-form');
 
-    for (var i = 1; i < 9; i++) {
-      dataArr[i] = {
-        author: {
-          avatar: MOCK.dataArr.author.avatar + i + '.png',
-        },
-        offer: {
-          type: MOCK.dataArr.offer.type[getRandomInRange(0, MOCK.dataArr.offer.type.length - 1)]
-        },
-        location: {
-          x: getRandomInRange(MOCK.dataArr.location.x.min, MOCK.dataArr.location.x.max),
-          y: getRandomInRange(MOCK.dataArr.location.y.min, MOCK.dataArr.location.y.max)
-        },
-      };
-    }
+  adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(adForm), function () {
+      window.createPopup(formPopupSuccess);
+    });
 
-    return dataArr;
-  };
+    evt.preventDefault();
+  });
 })();

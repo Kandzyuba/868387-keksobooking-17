@@ -4,7 +4,6 @@
   // перемещение пина
   var pinMain = document.querySelector('.map__pin--main');
 
-  pinMain.addEventListener('mouseup', window.renderPins);
   pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
       x: evt.clientX,

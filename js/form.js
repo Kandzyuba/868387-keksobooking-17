@@ -3,6 +3,7 @@
 (function () {
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
+  var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
   // Неактивное состояние формы
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -23,18 +24,41 @@
     }
   };
 
-  var inactivePage = function () {
+  window.inactivePage = function () {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
     addAttr(adFormFieldsets, 'disabled', true);
     addAttr(mapFilters, 'disabled', true);
   };
 
-  inactivePage();
+  window.inactivePage();
 
+  // Логика работы попапа при ошибке запроса
+  var onError = function () {
+    window.createPopup(formPopupError);
+
+    var error = document.querySelector('.error');
+    var errorButton = error.querySelector('.error__button');
+
+    errorButton.addEventListener('click', function () {
+      document.querySelector('main').removeChild(error);
+    });
+  };
+
+  // Активация страницы
   window.activePage = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     removeAttr(adFormFieldsets, 'disabled');
     removeAttr(mapFilters, 'disabled');
+
+    window.load(window.renderPins, onError);
+
+    var resetButton = adForm.querySelector('.ad-form__reset');
+
+    resetButton.addEventListener('click', function () {
+      window.inactivePage();
+    });
   };
 
   // Валидация формы
@@ -71,4 +95,5 @@
 
     time(timein, timeoutIndex);
   });
+
 })();
