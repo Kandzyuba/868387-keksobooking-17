@@ -3,6 +3,7 @@
 (function () {
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
+  var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
   // Неактивное состояние формы
@@ -45,6 +46,15 @@
     });
   };
 
+  // Сброс формы
+  var resetButton = adForm.querySelector('.ad-form__reset');
+
+  resetButton.addEventListener('click', function () {
+    adForm.reset();
+    window.inactivePage();
+    pinMain.addEventListener('click', window.activePage);
+  });
+
   // Активация страницы
   window.activePage = function () {
     map.classList.remove('map--faded');
@@ -54,11 +64,7 @@
 
     window.load(window.renderPins, onError);
 
-    var resetButton = adForm.querySelector('.ad-form__reset');
-
-    resetButton.addEventListener('click', function () {
-      window.inactivePage();
-    });
+    pinMain.removeEventListener('click', window.activePage);
   };
 
   // Валидация формы

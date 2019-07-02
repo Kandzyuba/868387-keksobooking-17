@@ -4,6 +4,8 @@
   // перемещение пина
   var pinMain = document.querySelector('.map__pin--main');
 
+  pinMain.addEventListener('click', window.activePage);
+
   pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
       x: evt.clientX,
@@ -15,8 +17,6 @@
     var addAdressValue = function (x, y) {
       adress.value = x + ', ' + y;
     };
-
-    window.activePage();
 
     var onMouseMove = function (moveEvt) {
       var shift = {
