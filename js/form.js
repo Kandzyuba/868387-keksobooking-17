@@ -37,7 +37,7 @@
   window.inactivePage();
 
   // Активация страницы
-  window.inicializationApp = function (data) {
+  window.inicializationApp = function () {
     activeScreen();
     window.load(window.activationPage, onError);
   };
@@ -47,13 +47,12 @@
     adForm.classList.remove('ad-form--disabled');
     removeAttr(adFormFieldsets, 'disabled');
     removeAttr(mapFilters, 'disabled');
-    pinMain.removeEventListener('click', window.activationPage);
+    pinMain.removeEventListener('click', window.inicializationApp);
   };
 
   window.activationPage = function (data) {
     window.dataCard = data;
     window.renderPins(data);
-    console.log(window.dataCard);
   };
 
   // Логика работы попапа при ошибке запроса
