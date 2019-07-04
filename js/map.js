@@ -1,10 +1,11 @@
 'use strict';
 
+// Модуль по работе с картой (перемещение пина)
 (function () {
   // перемещение пина
   var pinMain = document.querySelector('.map__pin--main');
 
-  pinMain.addEventListener('click', window.activePage);
+  pinMain.addEventListener('click', window.activationPage);
 
   pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {

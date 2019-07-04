@@ -1,9 +1,10 @@
 'use strict';
 
-// Загрузка данных с сервера
+// Модуль по работе с данными (загрузка с сервера, отправка данных формы на сервер)
 (function () {
   var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
 
+  // Загрузка данных с сервера
   window.load = function (onSuccess, onError) {
     var URL = 'https://js.dump.academy/keksobooking/data';
     var xhr = new XMLHttpRequest();
@@ -60,5 +61,30 @@
     });
 
     evt.preventDefault();
+  });
+
+  // Фильтрация по типу жилья/стоимости/числа комнат/числа гостей/услуг
+  var mapFilters = document.querySelector('.map__filters');
+  var housingType = document.querySelector('#housing-type');
+
+  var housingFilter = function (data) {
+    var selectedHouse = housingType.options.selectedIndex;
+
+    var houseArr = data.filter(function (elem) {
+      if (housingType.value === 'any') {
+        return elem.offer.type;
+      }
+      return elem.offer.type === housingType.options[selectedHouse].value;
+    });
+    return houseArr;
+  };
+
+  var generalFilter = function (data) {
+    window.removePins();
+    window.renderPins(housingFilter(data));
+  };
+
+  mapFilters.addEventListener('change', function () {
+    generalFilter();
   });
 })();
