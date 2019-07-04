@@ -64,10 +64,10 @@
   });
 
   // Фильтрация по типу жилья/стоимости/числа комнат/числа гостей/услуг
-  var mapFilters = document.querySelector('.map__filters');
-  var housingType = document.querySelector('#housing-type');
+  window.mapFilters = document.querySelector('.map__filters');
 
   var housingFilter = function (data) {
+    var housingType = document.querySelector('#housing-type');
     var selectedHouse = housingType.options.selectedIndex;
 
     var houseArr = data.filter(function (elem) {
@@ -79,12 +79,10 @@
     return houseArr;
   };
 
-  var generalFilter = function (data) {
+  window.generalFilter = function () {
     window.removePins();
-    window.renderPins(housingFilter(data));
+    window.renderPins(housingFilter(window.dataCard));
   };
 
-  mapFilters.addEventListener('change', function () {
-    generalFilter();
-  });
+  window.mapFilters.addEventListener('change', window.generalFilter);
 })();

@@ -37,16 +37,23 @@
   window.inactivePage();
 
   // Активация страницы
-  window.activationPage = function (data) {
+  window.inicializationApp = function (data) {
+    activeScreen();
+    window.load(window.activationPage, onError);
+  };
+
+  var activeScreen = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     removeAttr(adFormFieldsets, 'disabled');
     removeAttr(mapFilters, 'disabled');
-
-    window.load(window.renderPins, onError);
-    window.dataCard = data;
-
     pinMain.removeEventListener('click', window.activationPage);
+  };
+
+  window.activationPage = function (data) {
+    window.dataCard = data;
+    window.renderPins(data);
+    console.log(window.dataCard);
   };
 
   // Логика работы попапа при ошибке запроса
