@@ -1,18 +1,13 @@
 'use strict';
 
+// Модуль по работе с формой (состояния, сброс, валидация)
 (function () {
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
   var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
-  // Неактивное состояние формы
-  var adFormFieldsets = adForm.querySelectorAll('fieldset');
-  var mapFilters = map.querySelectorAll('.map__filter');
-  var adressValue = adForm.querySelector('#address');
-
-  adressValue.value = '570, 375';
-
+  // Функции добавления/удаления атрибута элементов формы
   var addAttr = function (formElements, name, value) {
     for (var i = 0; i < formElements.length; i++) {
       formElements[i].setAttribute(name, value);
@@ -25,6 +20,13 @@
     }
   };
 
+  // Неактивное состояние страницы
+  var adFormFieldsets = adForm.querySelectorAll('fieldset');
+  var mapFilters = map.querySelectorAll('.map__filter');
+  var adressValue = adForm.querySelector('#address');
+
+  adressValue.value = '570, 375';
+
   window.inactivePage = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
@@ -33,6 +35,25 @@
   };
 
   window.inactivePage();
+
+  // Активация страницы
+  window.inicializationApp = function () {
+    activeScreen();
+    window.load(window.activationPage, onError);
+  };
+
+  var activeScreen = function () {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    removeAttr(adFormFieldsets, 'disabled');
+    removeAttr(mapFilters, 'disabled');
+    pinMain.removeEventListener('click', window.inicializationApp);
+  };
+
+  window.activationPage = function (data) {
+    window.dataCard = data;
+    window.renderPins(data);
+  };
 
   // Логика работы попапа при ошибке запроса
   var onError = function () {
@@ -52,20 +73,8 @@
   resetButton.addEventListener('click', function () {
     adForm.reset();
     window.inactivePage();
-    pinMain.addEventListener('click', window.activePage);
+    pinMain.addEventListener('click', window.activationPage);
   });
-
-  // Активация страницы
-  window.activePage = function () {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    removeAttr(adFormFieldsets, 'disabled');
-    removeAttr(mapFilters, 'disabled');
-
-    window.load(window.renderPins, onError);
-
-    pinMain.removeEventListener('click', window.activePage);
-  };
 
   // Валидация формы
   var price = adForm.querySelector('#price');

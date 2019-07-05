@@ -1,9 +1,10 @@
 'use strict';
 
-// Загрузка данных с сервера
+// Модуль по работе с данными (загрузка с сервера, отправка данных формы на сервер)
 (function () {
   var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
 
+  // Загрузка данных с сервера
   window.load = function (onSuccess, onError) {
     var URL = 'https://js.dump.academy/keksobooking/data';
     var xhr = new XMLHttpRequest();

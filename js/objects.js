@@ -1,6 +1,6 @@
 'use strict';
 
-// Создание объектов на странице (пины, всплывающие попапы, карточки)
+// Модуль по созданию объектов на странице (пины, всплывающие попапы, карточки)
 (function () {
   var similarPinElement = document.querySelector('.map__pins');
   var mapTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -20,11 +20,19 @@
 
   // Заполнение блока новыми пинами
   window.renderPins = function (data) {
-    for (var i = 1; i < data.length; i++) {
+    for (var i = 0; i < data.slice(0, 5).length; i++) {
       fragment.appendChild(createPin(data[i]));
     }
 
     similarPinElement.appendChild(fragment);
+  };
+
+  // Удаление пинов
+  window.removePins = function () {
+    var existingPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    existingPins.forEach(function (it) {
+      it.remove();
+    });
   };
 
   // Создание и заполнение DOM элемента всплывающего окна
