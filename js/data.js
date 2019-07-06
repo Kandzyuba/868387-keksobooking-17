@@ -58,8 +58,23 @@
   adForm.addEventListener('submit', function (evt) {
     window.upload(new FormData(adForm), function () {
       window.createPopup(formPopupSuccess);
+
+      window.success = document.querySelector('.success');
+
     });
 
     evt.preventDefault();
+  });
+
+  document.addEventListener('keydown', function (evt) {
+    var pinMain = document.querySelector('.map__pin--main');
+
+    if (evt.keyCode === 27) {
+      window.success.remove();
+      window.inactivePage();
+      window.removePins();
+      adForm.reset();
+      pinMain.addEventListener('click', window.activationPage);
+    }
   });
 })();

@@ -73,6 +73,7 @@
   resetButton.addEventListener('click', function () {
     adForm.reset();
     window.inactivePage();
+    window.removePins();
     pinMain.addEventListener('click', window.activationPage);
   });
 
@@ -109,6 +110,31 @@
     var timeoutIndex = timeout.options.selectedIndex;
 
     time(timein, timeoutIndex);
+  });
+
+  var rooms = adForm.querySelector('#room_number');
+  var capacity = adForm.querySelector('#capacity');
+
+  rooms.addEventListener('change', function () {
+    var roomsIndex = rooms.options.selectedIndex;
+    if (roomsIndex === 0) {
+      capacity.options[2].selected = true;
+    } else if (roomsIndex === 1) {
+      capacity.options[1].selected = true;
+    } else if (roomsIndex === 2) {
+      capacity.options[0].selected = true;
+    } else if (roomsIndex === 3) {
+      capacity.options[3].selected = true;
+    }
+  });
+
+  capacity.addEventListener('change', function () {
+
+    if ((capacity.value <= rooms.value && (rooms.value < 100 && capacity.value > 0)) || (rooms.value === 100 && capacity.value === 0)) {
+      capacity.setCustomValidity('');
+    } else {
+      capacity.setCustomValidity('Количество гостей не должно превышать количество комнат');
+    }
   });
 
 })();
