@@ -3,6 +3,7 @@
 // Модуль по созданию объектов на странице (пины, всплывающие попапы, карточки)
 (function () {
   var similarPinElement = document.querySelector('.map__pins');
+  var map = document.querySelector('.map');
   var mapTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var fragment = document.createDocumentFragment();
 
@@ -25,6 +26,18 @@
     }
 
     similarPinElement.appendChild(fragment);
+    var mapPin = document.querySelector('.map__pin:not(.map__pin--main)');
+    mapPin.addEventListener('click', function () {
+      window.createCard();
+      mapPin.classList.add('map__pin--active');
+
+      var close = document.querySelector('.popup__close');
+      close.addEventListener('click', function () {
+        var cardElement = document.querySelector('.map__card');
+        cardElement.remove();
+        mapPin.classList.remove('map__pin--active');
+      });
+    });
   };
 
   // Удаление пинов
@@ -36,12 +49,19 @@
   };
 
   // Создание и заполнение DOM элемента всплывающего окна
-
   var similarPopupElement = document.querySelector('main');
 
   window.createPopup = function (typePopup) {
     var newPopup = typePopup.cloneNode(true);
     fragment.appendChild(newPopup);
     similarPopupElement.appendChild(fragment);
+  };
+
+  // Создание и заполнение DOM элемента карточки
+  window.createCard = function () {
+    var cardElement = document.querySelector('#card').content.querySelector('.map__card');
+    var newCard = cardElement.cloneNode(true);
+    fragment.appendChild(newCard);
+    map.appendChild(fragment);
   };
 })();

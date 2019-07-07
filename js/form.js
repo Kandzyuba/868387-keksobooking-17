@@ -7,6 +7,7 @@
   var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
+
   // Функции добавления/удаления атрибута элементов формы
   var addAttr = function (formElements, name, value) {
     for (var i = 0; i < formElements.length; i++) {
@@ -25,13 +26,15 @@
   var mapFilters = map.querySelectorAll('.map__filter');
   var adressValue = adForm.querySelector('#address');
 
-  adressValue.value = '570, 375';
-
   window.inactivePage = function () {
+    adressValue.value = '570, 375';
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     addAttr(adFormFieldsets, 'disabled', true);
     addAttr(mapFilters, 'disabled', true);
+    pinMain.addEventListener('click', window.inicializationApp);
+    pinMain.style.top = 375 + 'px';
+    pinMain.style.left = 570 + 'px';
   };
 
   window.inactivePage();
@@ -93,6 +96,7 @@
     nightPrice(typeIndex);
   });
 
+  // Валидация времени прибытия/отбытия
   var timein = adForm.querySelector('#timein');
   var timeout = adForm.querySelector('#timeout');
 
@@ -112,6 +116,7 @@
     time(timein, timeoutIndex);
   });
 
+  // Валидация + синхронизация полей с кол-вом комнат и постояльцев
   var rooms = adForm.querySelector('#room_number');
   var capacity = adForm.querySelector('#capacity');
 
