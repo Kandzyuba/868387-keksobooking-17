@@ -5,9 +5,7 @@
   // перемещение пина
   var pinMain = document.querySelector('.map__pin--main');
 
-
   pinMain.addEventListener('click', window.inicializationApp);
-
   pinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
       x: evt.clientX,
@@ -62,5 +60,4 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
 })();

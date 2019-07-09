@@ -7,7 +7,6 @@
   var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
-
   // Функции добавления/удаления атрибута элементов формы
   var addAttr = function (formElements, name, value) {
     for (var i = 0; i < formElements.length; i++) {
