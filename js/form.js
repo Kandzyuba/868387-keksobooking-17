@@ -7,54 +7,42 @@
   var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
-  // Функции добавления/удаления атрибута элементов формы
-  var addAttr = function (formElements, name, value) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].setAttribute(name, value);
-    }
-  };
-
-  var removeAttr = function (formElements, name) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].removeAttribute(name);
-    }
-  };
-
   // Неактивное состояние страницы
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var mapFilters = map.querySelectorAll('.map__filter');
   var adressValue = adForm.querySelector('#address');
 
-  window.inactivePage = function () {
+  var inactivePage = function () {
     adressValue.value = '570, 375';
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    addAttr(adFormFieldsets, 'disabled', true);
-    addAttr(mapFilters, 'disabled', true);
-    pinMain.addEventListener('click', window.inicializationApp);
+    window.utils.addAttr(adFormFieldsets, 'disabled', true);
+    window.utils.addAttr(mapFilters, 'disabled', true);
+    pinMain.addEventListener('click', inicializationApp);
     pinMain.style.top = 375 + 'px';
     pinMain.style.left = 570 + 'px';
+
   };
 
-  window.inactivePage();
+  inactivePage();
 
   // Активация страницы
-  window.inicializationApp = function () {
+  var inicializationApp = function () {
     activeScreen();
-    window.load(window.activationPage, onError);
+    window.data.load(activationPage, onError);
   };
 
   var activeScreen = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    removeAttr(adFormFieldsets, 'disabled');
-    removeAttr(mapFilters, 'disabled');
-    pinMain.removeEventListener('click', window.inicializationApp);
+    window.utils.removeAttr(adFormFieldsets, 'disabled');
+    window.utils.removeAttr(mapFilters, 'disabled');
+    pinMain.removeEventListener('click', inicializationApp);
   };
 
-  window.activationPage = function (data) {
+  var activationPage = function (data) {
     window.dataCard = data;
-    window.renderPins(data);
+    window.objects.renderPins(data);
   };
 
   // Логика работы попапа при ошибке запроса
@@ -141,4 +129,9 @@
     }
   });
 
+  window.form = {
+    inactivePage: inactivePage,
+    inicializationApp: inicializationApp,
+    activationPage: activationPage,
+  };
 })();

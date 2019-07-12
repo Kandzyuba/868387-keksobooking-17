@@ -5,7 +5,7 @@
   var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
 
   // Загрузка данных с сервера
-  window.load = function (onSuccess, onError) {
+  var load = function (onSuccess, onError) {
     var URL = 'https://js.dump.academy/keksobooking/data';
     var xhr = new XMLHttpRequest();
 
@@ -40,7 +40,7 @@
   };
 
   // Отправка данных формы на сервер
-  window.upload = function (data, onSuccess) {
+  var upload = function (data, onSuccess) {
     var URL = 'https://js.dump.academy/keksobooking';
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -56,8 +56,8 @@
   var adForm = document.querySelector('.ad-form');
 
   adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(adForm), function () {
-      window.createPopup(formPopupSuccess);
+    upload(new FormData(adForm), function () {
+      window.objects.createPopup(formPopupSuccess);
 
       window.success = document.querySelector('.success');
 
@@ -71,10 +71,15 @@
 
     if (evt.keyCode === 27) {
       window.success.remove();
-      window.inactivePage();
-      window.removePins();
+      window.form.inactivePage();
+      window.objects.removePins();
       adForm.reset();
-      pinMain.addEventListener('click', window.activationPage);
+      pinMain.addEventListener('click', window.form.activationPage);
     }
   });
+
+  window.data = {
+    load: load,
+    upload: upload,
+  };
 })();
