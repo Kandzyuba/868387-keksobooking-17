@@ -2,7 +2,6 @@
 
 // Модуль по работе с данными (загрузка с сервера, отправка данных формы на сервер)
 (function () {
-  var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
 
   // Загрузка данных с сервера
   var load = function (onSuccess, onError) {
@@ -52,59 +51,6 @@
     xhr.open('POST', URL);
     xhr.send(data);
   };
-
-  var adForm = document.querySelector('.ad-form');
-
-  adForm.addEventListener('submit', function (evt) {
-    upload(new FormData(adForm), function () {
-      window.objects.createPopup(formPopupSuccess);
-
-      window.success = document.querySelector('.success');
-    });
-
-    evt.preventDefault();
-  });
-
-  document.addEventListener('keydown', function (evt) {
-    // var pinMain = document.querySelector('.map__pin--main');
-    var map = document.querySelector('.map');
-    var mapPin = document.querySelectorAll('.map__pin');
-    var main = document.querySelector('main');
-    var cardElement = document.querySelector('.map__card');
-
-    // if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
-
-    //   cardElement.remove();
-
-
-    //   Array.from(mapPin).filter(function (el) {
-    //     return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
-    //   });
-
-    // } else if (window.success.parentNode === main && evt.keyCode === 27) {
-    //   window.form.resetForm();
-    //   window.success.remove();
-    //   window.form.inactivePage();
-
-    //   // document.querySelector('.map__card').remove();
-    //   // window.objects.removePins();
-    //   // adForm.reset();
-    //   // pinMain.addEventListener('click', window.form.activationPage);
-    // }
-
-    if (evt.keyCode === 27 && window.success.parentNode === main) {
-      window.form.resetForm();
-      window.success.remove();
-      window.form.inactivePage();
-
-    } else if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
-      cardElement.remove();
-
-      Array.from(mapPin).filter(function (el) {
-        return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
-      });
-    }
-  });
 
   window.data = {
     load: load,
