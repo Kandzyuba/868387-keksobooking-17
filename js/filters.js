@@ -2,99 +2,57 @@
 
 // Фильтрация по типу жилья/стоимости/числа комнат/числа гостей/услуг
 (function () {
-  var mapFilters = document.querySelector('.map__filters');
+  var housingType = document.querySelector('#housing-type');
+  var housingPrice = document.querySelector('#housing-price');
+  var housingRooms = document.querySelector('#housing-rooms');
+  var housingGuests = document.querySelector('#housing-guests');
+  var housingFeatures = document.querySelectorAll('#housing-features input');
 
-  var housingFilter = function (data) {
-    var housingType = document.querySelector('#housing-type');
-    var selectedHouse = housingType.options.selectedIndex;
-
-    var houseArr = data.filter(function (elem) {
-      if (housingType.value === 'any') {
-        return elem.offer.type;
-      }
-      return elem.offer.type === housingType.options[selectedHouse].value;
-    });
-    console.log(houseArr);
-    return houseArr;
+  var getHousingType = function (element) {
+    return housingType.value === 'any' ? true : element.offer.type === housingType.value;
   };
 
-  var priceFilter = function (data) {
-    var housingPrice = document.querySelector('#housing-price');
-    var selectedPrice = housingPrice.options.selectedIndex;
-    console.log(housingPrice.options[2].value);
-    var typeArr = data.filter(function (elem) {
-      if (housingPrice.value === 'any') {
-        return elem.offer.price;
-      }
-      console.log(elem.offer.price);
-      return elem.offer.price === housingPrice.options[selectedPrice].value;
-    });
-    console.log(typeArr);
-    return typeArr;
+  var getHousingPrice = function (element) {
+    switch (housingPrice.value) {
+      case 'low': return element.offer.price <= 10000;
+      case 'middle': return element.offer.price >= 10000 && element.offer.price <= 50000;
+      case 'high': return element.offer.price >= 50000;
+      default: return true;
+    }
   };
 
-  var roomFilter = function (data) {
-    var roomType = document.querySelector('#housing-rooms');
-    var selectedRooms = roomType.options.selectedIndex;
+  var getHousingRooms = function (element) {
+    return housingRooms.value === 'any' ? true : parseInt(housingRooms.value, 10) === element.offer.rooms;
+  };
 
-    var roomsArr = data.filter(function (elem) {
-      if (roomType.value === 'any') {
-        return elem.offer.rooms;
-      }
-      // Вынужден добавить не строгую проверку, т.к. разные типы из данных и значения. Иначе не работает
-      return elem.offer.rooms == roomType.options[selectedRooms].value;
+  var getHousingGuests = function (element) {
+    return housingGuests.value === 'any' ? true : parseInt(housingGuests.value, 10) === element.offer.guests;
+  };
+
+  var getHousingFeatures = function (element) {
+    var checkedFeatures = Array.from(housingFeatures).filter(function (el) {
+      return el.checked;
+    }).map(function (el) {
+      return el.value;
     });
 
-    return roomsArr;
-  };
-
-  var guestsFilter = function (data) {
-    var guestsType = document.querySelector('#housing-guests');
-    var selectedGuests = guestsType.options.selectedIndex;
-
-    var guestsArr = data.filter(function (elem) {
-      if (guestsType.value === 'any') {
-        return elem.offer.guests;
-      }
-
-      return elem.offer.guests == guestsType.options[selectedGuests].value;
+    return checkedFeatures.every(function (val) {
+      return element.offer.features.indexOf(val) !== -1;
     });
-
-    return guestsArr;
   };
 
-  var featuresFilter = function (data) {
-    var featuresType = document.querySelector('#housing-features');
-    var selectedFeatures = featuresType.querySelector('input').checked;
+  window.pinFilter = function (data) {
+    var map = document.querySelector('.map');
+    if (map.lastChild === document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
 
-    var featuresArr = data.filter(function (elem) {
-
-      elem.offer.features.forEach(function (item) {
-        if (selectedFeatures.value == item) {
-          featuresArr.push(item);
-        }
-
-      });
-      return elem.offer.features;
-
-    });
-
-    return featuresArr;
-  };
-  // Привет, Вить. Чтобы проверить работособность можешь раскомментировать любую строчку из ф-и ниже. (пока что работает только при раскомментированной только одной ф-и). featuresFilter и priceFilter не работают.
-  var generalFilter = function () {
-    window.objects.removePins();
-    // window.objects.renderPins(housingFilter(window.dataCard));
-    // window.objects.renderPins(priceFilter(window.dataCard));
-    // window.objects.renderPins(roomFilter(window.dataCard));
-    // window.objects.renderPins(guestsFilter(window.dataCard));
-    window.objects.renderPins(featuresFilter(window.dataCard));
-  };
-
-  mapFilters.addEventListener('change', generalFilter);
-
-  window.filters = {
-    mapFilters: mapFilters,
-    generalFilter: generalFilter
+    return data.filter(function (el) {
+      return getHousingType(el) &&
+             getHousingPrice(el) &&
+             getHousingRooms(el) &&
+             getHousingGuests(el) &&
+             getHousingFeatures(el);
+    }).slice(0, 5);
   };
 })();

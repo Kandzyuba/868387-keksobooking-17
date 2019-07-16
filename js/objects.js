@@ -21,15 +21,18 @@
       if (map.lastChild !== map.querySelector('.map__card')) {
         createCard(dataArr);
         newPin.classList.add('map__pin--active');
+      } else {
+        var cardElement = document.querySelector('.map__card');
+        var mapPin = document.querySelectorAll('.map__pin');
+
+        Array.from(mapPin).filter(function (el) {
+          return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
+        });
+
+        cardElement.remove();
+        createCard(dataArr);
+        newPin.classList.add('map__pin--active');
       }
-      // else {
-      //   var cardElement = document.querySelector('.map__card');
-      //   var mapPin = document.querySelector('.map__pin');
-      //   cardElement.remove();
-      //   mapPin.classList.remove('map__pin--active');
-      //   window.createCard(dataArr);
-      //   newPin.classList.add('map__pin--active');
-      // }
 
 
       var close = document.querySelector('.popup__close');
@@ -45,7 +48,7 @@
 
   // Заполнение блока новыми пинами
   var renderPins = function (data) {
-    for (var i = 0; i < data.slice(0, 5).length; i++) {
+    for (var i = 0; i < data.length; i++) {
       fragment.appendChild(createPin(data[i]));
     }
 
@@ -69,18 +72,14 @@
     similarPopupElement.appendChild(fragment);
   };
 
-  var cardDetails = function (it) {
-    var type = '';
-    if (it === 'bungalo') {
-      type = 'Бунгало';
-    } else if (it === 'flat') {
-      type = 'Квартира';
-    } else if (it === 'house') {
-      type = 'Дом';
-    } else if (it === 'palace') {
-      type = 'Дворец';
+  var getHotelType = function (it) {
+    switch (it) {
+      case 'bungalo': return 'Бунгало';
+      case 'flat': return 'Квартира';
+      case 'house': return 'Дом';
+      case 'palace': return 'Дворец';
+      default: return true;
     }
-    return type;
   };
 
   // Создание и заполнение DOM элемента карточки
@@ -91,7 +90,7 @@
     newCard.querySelector('.popup__title').textContent = dataArr.offer.title;
     newCard.querySelector('.popup__text--address').textContent = dataArr.offer.address;
     newCard.querySelector('.popup__text--price').textContent = dataArr.offer.price + '₽/ночь';
-    newCard.querySelector('.popup__type').textContent = cardDetails(dataArr.offer.type);
+    newCard.querySelector('.popup__type').textContent = getHotelType(dataArr.offer.type);
     newCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + dataArr.offer.checkin + ' выезд до ' + dataArr.offer.checkout;
 
 

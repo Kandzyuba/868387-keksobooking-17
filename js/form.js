@@ -6,6 +6,7 @@
   var adForm = document.querySelector('.ad-form');
   var pinMain = document.querySelector('.map__pin--main');
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
+  var pinFilters = document.querySelector('.map__filters');
 
   // Неактивное состояние страницы
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -21,7 +22,7 @@
     pinMain.addEventListener('click', inicializationApp);
     pinMain.style.top = 375 + 'px';
     pinMain.style.left = 570 + 'px';
-
+    pinFilters.removeEventListener('change', onChangeFilter);
   };
 
   inactivePage();
@@ -40,9 +41,15 @@
     pinMain.removeEventListener('click', inicializationApp);
   };
 
+  var onChangeFilter = function () {
+    window.objects.removePins();
+    window.objects.renderPins(window.pinFilter(window.dataCard));
+  };
+
   var activationPage = function (data) {
     window.dataCard = data;
-    window.objects.renderPins(data);
+    window.objects.renderPins(window.pinFilter(window.dataCard));
+    pinFilters.addEventListener('change', onChangeFilter);
   };
 
   // Логика работы попапа при ошибке запроса
@@ -62,8 +69,9 @@
 
   resetButton.addEventListener('click', function () {
     adForm.reset();
-    window.inactivePage();
-    window.removePins();
+    inactivePage();
+    document.querySelector('.map__card').remove();
+    window.objects.removePins();
     pinMain.addEventListener('click', window.activationPage);
   });
 

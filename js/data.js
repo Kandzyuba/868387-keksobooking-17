@@ -60,7 +60,6 @@
       window.objects.createPopup(formPopupSuccess);
 
       window.success = document.querySelector('.success');
-
     });
 
     evt.preventDefault();
@@ -68,9 +67,21 @@
 
   document.addEventListener('keydown', function (evt) {
     var pinMain = document.querySelector('.map__pin--main');
+    var map = document.querySelector('.map');
+    var mapPin = document.querySelectorAll('.map__pin');
+    var main = document.querySelector('main');
+    if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
+      var cardElement = document.querySelector('.map__card');
+      cardElement.remove();
 
-    if (evt.keyCode === 27) {
+
+      Array.from(mapPin).filter(function (el) {
+        return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
+      });
+
+    } else if (window.success.parentNode === main && evt.keyCode === 27) {
       window.success.remove();
+      // document.querySelector('.map__card').remove();
       window.form.inactivePage();
       window.objects.removePins();
       adForm.reset();
