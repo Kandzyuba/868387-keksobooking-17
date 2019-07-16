@@ -66,26 +66,43 @@
   });
 
   document.addEventListener('keydown', function (evt) {
-    var pinMain = document.querySelector('.map__pin--main');
+    // var pinMain = document.querySelector('.map__pin--main');
     var map = document.querySelector('.map');
     var mapPin = document.querySelectorAll('.map__pin');
     var main = document.querySelector('main');
-    if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
-      var cardElement = document.querySelector('.map__card');
-      cardElement.remove();
+    var cardElement = document.querySelector('.map__card');
 
+    // if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
+
+    //   cardElement.remove();
+
+
+    //   Array.from(mapPin).filter(function (el) {
+    //     return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
+    //   });
+
+    // } else if (window.success.parentNode === main && evt.keyCode === 27) {
+    //   window.form.resetForm();
+    //   window.success.remove();
+    //   window.form.inactivePage();
+
+    //   // document.querySelector('.map__card').remove();
+    //   // window.objects.removePins();
+    //   // adForm.reset();
+    //   // pinMain.addEventListener('click', window.form.activationPage);
+    // }
+
+    if (evt.keyCode === 27 && window.success.parentNode === main) {
+      window.form.resetForm();
+      window.success.remove();
+      window.form.inactivePage();
+
+    } else if (evt.keyCode === 27 && map.lastChild === map.querySelector('.map__card')) {
+      cardElement.remove();
 
       Array.from(mapPin).filter(function (el) {
         return el.classList.contains('map__pin--active') ? el.classList.remove('map__pin--active') : false;
       });
-
-    } else if (window.success.parentNode === main && evt.keyCode === 27) {
-      window.success.remove();
-      // document.querySelector('.map__card').remove();
-      window.form.inactivePage();
-      window.objects.removePins();
-      adForm.reset();
-      pinMain.addEventListener('click', window.form.activationPage);
     }
   });
 

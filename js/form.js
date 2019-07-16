@@ -67,12 +67,23 @@
   // Сброс формы
   var resetButton = adForm.querySelector('.ad-form__reset');
 
-  resetButton.addEventListener('click', function () {
+  var resetForm = function () {
+    if (map.lastChild === map.querySelector('.map__card')) {
+      map.querySelector('.map__card').remove();
+    }
     adForm.reset();
-    inactivePage();
-    document.querySelector('.map__card').remove();
     window.objects.removePins();
-    pinMain.addEventListener('click', window.activationPage);
+    pinMain.addEventListener('click', window.form.inicializationApp);
+  };
+
+  resetButton.addEventListener('click', function () {
+    inactivePage();
+    resetForm();
+
+    // adForm.reset();
+    // document.querySelector('.map__card').remove();
+    // window.objects.removePins();
+    // pinMain.addEventListener('click', window.activationPage);
   });
 
   // Валидация формы
@@ -115,22 +126,24 @@
   var rooms = adForm.querySelector('#room_number');
   var capacity = adForm.querySelector('#capacity');
 
+  var selectedCapacity = function (elementNumber) {
+    capacity.options[elementNumber].selected = true;
+  };
+
   rooms.addEventListener('change', function () {
     var roomsIndex = rooms.options.selectedIndex;
-    if (roomsIndex === 0) {
-      capacity.options[2].selected = true;
-    } else if (roomsIndex === 1) {
-      capacity.options[1].selected = true;
-    } else if (roomsIndex === 2) {
-      capacity.options[0].selected = true;
-    } else if (roomsIndex === 3) {
-      capacity.options[3].selected = true;
+
+    switch (roomsIndex) {
+      case 0: return selectedCapacity(2);
+      case 1: return selectedCapacity(1);
+      case 2: return selectedCapacity(0);
+      case 3: return selectedCapacity(3);
+      default: return true;
     }
   });
 
   capacity.addEventListener('change', function () {
-
-    if ((capacity.value <= rooms.value && (rooms.value < 100 && capacity.value > 0)) || (rooms.value === 100 && capacity.value === 0)) {
+    if (((rooms.value >= capacity.value) && rooms.value < 100 && capacity.value > 0) || (rooms.value > 99 && capacity.value < 1)) {
       capacity.setCustomValidity('');
     } else {
       capacity.setCustomValidity('Количество гостей не должно превышать количество комнат');
@@ -141,5 +154,6 @@
     inactivePage: inactivePage,
     inicializationApp: inicializationApp,
     activationPage: activationPage,
+    resetForm: resetForm
   };
 })();
