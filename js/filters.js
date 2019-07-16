@@ -43,6 +43,7 @@
 
   window.pinFilter = function (data) {
     var map = document.querySelector('.map');
+
     if (map.lastChild === document.querySelector('.map__card')) {
       document.querySelector('.map__card').remove();
     }

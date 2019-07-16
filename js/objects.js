@@ -34,10 +34,9 @@
         newPin.classList.add('map__pin--active');
       }
 
-
       var close = document.querySelector('.popup__close');
       close.addEventListener('click', function () {
-        var cardElement = document.querySelector('.map__card');
+        cardElement = document.querySelector('.map__card');
         cardElement.remove();
         newPin.classList.remove('map__pin--active');
       });

@@ -75,8 +75,21 @@
   };
 
   var onChangeFilter = function () {
-    window.objects.removePins();
-    window.objects.renderPins(window.pinFilter(window.dataCard));
+
+
+    var lastTimeout = setTimeout(function () {
+      window.objects.removePins();
+      window.objects.renderPins(window.pinFilter(window.dataCard));
+    }, 500);
+
+    if (lastTimeout) {
+      clearTimeout(lastTimeout);
+      lastTimeout = setTimeout(function () {
+        window.objects.removePins();
+        window.objects.renderPins(window.pinFilter(window.dataCard));
+      }, 500);
+    }
+
   };
 
   // Состояния страницы
