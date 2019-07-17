@@ -7,17 +7,13 @@
   var pinMain = document.querySelector('.map__pin--main');
   var pinFilters = document.querySelector('.map__filters');
   var mapPin = document.querySelectorAll('.map__pin');
-  var main = document.querySelector('main');
-  var success = document.querySelector('.success');
-  var error = document.querySelector('.error');
-  var cardElement = document.querySelector('.map__card');
 
   // Функции обработчиков событий
   var formPopupError = document.querySelector('#error').content.querySelector('.error');
 
   var onError = function () {
     window.createPopup(formPopupError);
-    error = document.querySelector('.error');
+    var error = document.querySelector('.error');
     var errorButton = error.querySelector('.error__button');
 
     errorButton.addEventListener('click', function () {
@@ -26,8 +22,8 @@
   };
 
   var onClickSuccess = function () {
-    main = document.querySelector('main');
-    success = document.querySelector('.success');
+    var main = document.querySelector('main');
+    var success = document.querySelector('.success');
 
     if (main.lastChild === success) {
       document.querySelector('main').removeChild(success);
@@ -38,22 +34,22 @@
 
   var formPopupSuccess = document.querySelector('#success').content.querySelector('.success');
 
-  var onSuccessUpload = function (evt) {
-    window.data.upload(new FormData(adForm), function () {
-      window.objects.createPopup(formPopupSuccess);
-    });
-
-    evt.preventDefault();
-
+  var successActions = function () {
+    window.objects.createPopup(formPopupSuccess);
     document.addEventListener('click', onClickSuccess);
   };
 
+  var onSuccessUpload = function (evt) {
+    window.data.upload(new FormData(adForm), successActions);
+    evt.preventDefault();
+  };
+
   var onKeydownEsc = function (evt) {
-    cardElement = document.querySelector('.map__card');
-    success = document.querySelector('.success');
-    error = document.querySelector('.error');
+    var cardElement = document.querySelector('.map__card');
+    var success = document.querySelector('.success');
+    var error = document.querySelector('.error');
     mapPin = document.querySelectorAll('.map__pin');
-    main = document.querySelector('main');
+    var main = document.querySelector('main');
 
     if (evt.keyCode === 27 && main.lastChild === success) {
       window.form.resetForm();
@@ -75,8 +71,6 @@
   };
 
   var onChangeFilter = function () {
-
-
     var lastTimeout = setTimeout(function () {
       window.objects.removePins();
       window.objects.renderPins(window.pinFilter(window.dataCard));
@@ -89,7 +83,19 @@
         window.objects.renderPins(window.pinFilter(window.dataCard));
       }, 500);
     }
+  };
 
+  // Функции добавления/удаления атрибута элементов формы
+  var addAttr = function (formElements, name, value) {
+    for (var i = 0; i < formElements.length; i++) {
+      formElements[i].setAttribute(name, value);
+    }
+  };
+
+  var removeAttr = function (formElements, name) {
+    for (var i = 0; i < formElements.length; i++) {
+      formElements[i].removeAttribute(name);
+    }
   };
 
   // Состояния страницы
@@ -101,8 +107,8 @@
     adressValue.value = '570, 375';
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    window.utils.addAttr(adFormFieldsets, 'disabled', true);
-    window.utils.addAttr(mapFilters, 'disabled', true);
+    addAttr(adFormFieldsets, 'disabled', true);
+    addAttr(mapFilters, 'disabled', true);
     pinMain.style.top = 375 + 'px';
     pinMain.style.left = 570 + 'px';
 
@@ -112,8 +118,8 @@
   var activeScreen = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.utils.removeAttr(adFormFieldsets, 'disabled');
-    window.utils.removeAttr(mapFilters, 'disabled');
+    removeAttr(adFormFieldsets, 'disabled');
+    removeAttr(mapFilters, 'disabled');
 
     pinMain.removeEventListener('click', inicializationApp);
   };
@@ -156,6 +162,59 @@
     inactiveScreen();
     resetForm();
   });
+
+  // Загрузка изображений
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var avatarChooser = adForm.querySelector('#avatar');
+  var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
+  var imagesChooser = adForm.querySelector('#images');
+  var imagesPreviewContainer = adForm.querySelector('.ad-form__photo');
+
+  avatarChooser.addEventListener('change', function () {
+    var fileAvatar = avatarChooser.files[0];
+    var fileName = fileAvatar.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        avatarPreview.src = reader.result;
+      });
+
+      reader.readAsDataURL(fileAvatar);
+    }
+  });
+
+  imagesChooser.addEventListener('change', function () {
+    var imageElement = document.createElement('img');
+    imageElement.width = 40;
+    imageElement.height = 44;
+    imagesPreviewContainer.appendChild(imageElement);
+    var imagesPreview = adForm.querySelector('.ad-form__photo img');
+    var fileImage = imagesChooser.files;
+
+    if (matches) {
+      var reader = new FileReader();
+      for (var i = 0; i < fileImage.length; i++) {
+        var matches = FILE_TYPES.some(function (it) {
+          return fileName.endsWith(it);
+        });
+
+        var fileName = fileImage[i].name.toLowerCase();
+        reader.append('file_' + i, fileImage[i]);
+      }
+      reader.addEventListener('load', function () {
+        imagesPreview.src = reader.result;
+      });
+
+      reader.readAsDataURL(fileImage);
+    }
+  });
+
 
   // Валидация формы
   var price = adForm.querySelector('#price');
