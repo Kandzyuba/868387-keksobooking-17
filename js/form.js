@@ -189,31 +189,37 @@
     }
   });
 
-  imagesChooser.addEventListener('change', function () {
-    var imageElement = document.createElement('img');
-    imageElement.width = 40;
-    imageElement.height = 44;
-    imagesPreviewContainer.appendChild(imageElement);
-    var imagesPreview = adForm.querySelector('.ad-form__photo img');
-    var fileImage = imagesChooser.files;
+  var onFileSelect = function (evt) {
+    var files = evt.target.files;
+    imagesPreviewContainer.remove();
 
-    if (matches) {
-      var reader = new FileReader();
-      for (var i = 0; i < fileImage.length; i++) {
-        var matches = FILE_TYPES.some(function (it) {
-          return fileName.endsWith(it);
-        });
-
-        var fileName = fileImage[i].name.toLowerCase();
-        reader.append('file_' + i, fileImage[i]);
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        continue;
       }
-      reader.addEventListener('load', function () {
-        imagesPreview.src = reader.result;
-      });
 
-      reader.readAsDataURL(fileImage);
+      var reader = new FileReader();
+
+      var photoContainer = document.querySelector('.ad-form__photo-container');
+
+      reader.onload = (function (theFile) {
+        return function (el) {
+
+          var divEl = document.createElement('div');
+          divEl.classList.add('ad-form__photo');
+
+          divEl.innerHTML = ['<img class="thumb" width="80%" width="80%" src="', el.target.result, '" title="', escape(theFile.name), '"/>'].join('');
+          photoContainer.insertBefore(divEl, null);
+        };
+      })(f);
+
+      reader.readAsDataURL(f);
     }
-  });
+  };
+
+  imagesChooser.addEventListener('change', onFileSelect, false);
 
 
   // Валидация формы
