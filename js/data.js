@@ -2,6 +2,12 @@
 
 // Модуль по работе с данными (загрузка с сервера, отправка данных формы на сервер)
 (function () {
+  var Code = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    NOT_FOUND: 404
+  };
 
   // Загрузка данных с сервера
   var load = function (onSuccess, onError) {
@@ -12,16 +18,16 @@
       var error;
 
       switch (xhr.status) {
-        case 200:
+        case Code.SUCCESS:
           onSuccess(xhr.response);
           break;
-        case 400:
+        case Code.BAD_REQUEST:
           error = 'Неверный запрос';
           break;
-        case 401:
+        case Code.UNAUTHORIZED:
           error = 'Пользователь не авторизован';
           break;
-        case 404:
+        case Code.NOT_FOUND:
           error = 'Ничего не найдено';
           break;
         default:

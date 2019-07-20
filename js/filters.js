@@ -8,15 +8,23 @@
   var housingGuests = document.querySelector('#housing-guests');
   var housingFeatures = document.querySelectorAll('#housing-features input');
 
+  var Price = {
+    LOW: 'low',
+    MIDDLE: 'middle',
+    HIGH: 'high',
+    MIN: 10000,
+    MAX: 50000
+  };
+
   var getHousingType = function (element) {
     return housingType.value === 'any' ? true : element.offer.type === housingType.value;
   };
 
   var getHousingPrice = function (element) {
     switch (housingPrice.value) {
-      case 'low': return element.offer.price <= 10000;
-      case 'middle': return element.offer.price >= 10000 && element.offer.price <= 50000;
-      case 'high': return element.offer.price >= 50000;
+      case Price.LOW: return element.offer.price <= Price.MIN;
+      case Price.MIDDLE: return element.offer.price >= Price.MIN && element.offer.price <= Price.MAX;
+      case Price.HIGH: return element.offer.price >= Price.MAX;
       default: return true;
     }
   };

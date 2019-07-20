@@ -3,6 +3,10 @@
 // Модуль по работе с картой (перемещение пина)
 (function () {
   var pinMain = document.querySelector('.map__pin--main');
+  var OFFSET_X_MAX = 1135;
+  var OFFSET_Y_MIN = 130;
+  var OFFSET_Y_MAX = 630;
+
 
   pinMain.addEventListener('click', window.form.inicializationApp);
   pinMain.addEventListener('mousedown', function (evt) {
@@ -11,10 +15,10 @@
       y: evt.clientY
     };
 
-    var adress = document.querySelector('#address');
+    var address = document.querySelector('#address');
 
-    var addAdressValue = function (x, y) {
-      adress.value = x + ', ' + y;
+    var addAddressValue = function (x, y) {
+      address.value = x + ', ' + y;
     };
 
     var onMouseMove = function (moveEvt) {
@@ -31,17 +35,13 @@
       var positionY = pinMain.offsetTop - shift.y;
       var positionX = pinMain.offsetLeft - shift.x;
 
-      var OFFSET_X_MAX = 1135;
-      var OFFSET_Y_MIN = 130;
-      var OFFSET_Y_MAX = 630;
-
       positionX = positionX < 0 ? 0 : positionX;
       positionX = positionX > OFFSET_X_MAX ? OFFSET_X_MAX : positionX;
 
       positionY = positionY < OFFSET_Y_MIN ? OFFSET_Y_MIN : positionY;
       positionY = positionY > OFFSET_Y_MAX ? OFFSET_Y_MAX : positionY;
 
-      addAdressValue(positionX, positionY);
+      addAddressValue(positionX, positionY);
 
       pinMain.style.top = positionY + 'px';
       pinMain.style.left = positionX + 'px';
@@ -50,7 +50,7 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      addAdressValue(parseInt(pinMain.style.left, 10), parseInt(pinMain.style.top, 10));
+      addAddressValue(parseInt(pinMain.style.left, 10), parseInt(pinMain.style.top, 10));
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);

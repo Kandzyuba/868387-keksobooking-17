@@ -101,10 +101,10 @@
   // Состояния страницы
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var mapFilters = map.querySelectorAll('.map__filter');
-  var adressValue = adForm.querySelector('#address');
+  var addressValue = adForm.querySelector('#address');
 
   var inactiveScreen = function () {
-    adressValue.value = '570, 375';
+    addressValue.value = '570, 375';
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     addAttr(adFormFieldsets, 'disabled', true);
@@ -150,7 +150,7 @@
       map.querySelector('.map__card').remove();
     }
     adForm.reset();
-    avatarPreview.src = './img/muffin-grey.svg';
+    window.avatarPreview.src = './img/muffin-grey.svg';
 
     var imagesPool = document.querySelectorAll('.ad-form__photo');
     imagesPool.forEach(function (it) {
@@ -174,65 +174,6 @@
     inactiveScreen();
     resetForm();
   });
-
-  // Загрузка изображений
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var avatarChooser = adForm.querySelector('#avatar');
-  var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
-  var imagesChooser = adForm.querySelector('#images');
-  var imagesPreviewContainer = adForm.querySelector('.ad-form__photo');
-
-  avatarChooser.addEventListener('change', function () {
-    var fileAvatar = avatarChooser.files[0];
-    var fileName = fileAvatar.name.toLowerCase();
-
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        avatarPreview.src = reader.result;
-      });
-
-      reader.readAsDataURL(fileAvatar);
-    }
-  });
-
-  var onFileSelect = function (evt) {
-    var files = evt.target.files;
-    imagesPreviewContainer.remove();
-
-    for (var i = 0; i < files.length; i++) {
-      var f = files[i];
-      // Only process image files.
-      if (!f.type.match('image.*')) {
-        continue;
-      }
-
-      var reader = new FileReader();
-
-      var photoContainer = document.querySelector('.ad-form__photo-container');
-
-      reader.onload = (function (theFile) {
-        return function (el) {
-
-          var divEl = document.createElement('div');
-          divEl.classList.add('ad-form__photo');
-
-          divEl.innerHTML = ['<img class="thumb" width="80%" width="80%" src="', el.target.result, '" title="', escape(theFile.name), '"/>'].join('');
-          photoContainer.insertBefore(divEl, null);
-        };
-      })(f);
-
-      reader.readAsDataURL(f);
-    }
-  };
-
-  imagesChooser.addEventListener('change', onFileSelect, false);
-
 
   // Валидация формы
   var price = adForm.querySelector('#price');
@@ -301,7 +242,6 @@
   window.form = {
     inactiveScreen: inactiveScreen,
     inicializationApp: inicializationApp,
-    activationPage: activationPage,
     resetForm: resetForm
   };
 })();

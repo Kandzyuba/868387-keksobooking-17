@@ -122,7 +122,6 @@
   window.objects = {
     renderPins: renderPins,
     removePins: removePins,
-    createPopup: createPopup,
-    createCard: createCard
+    createPopup: createPopup
   };
 })();
