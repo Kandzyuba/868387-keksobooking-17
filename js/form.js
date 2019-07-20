@@ -150,6 +150,18 @@
       map.querySelector('.map__card').remove();
     }
     adForm.reset();
+    avatarPreview.src = './img/muffin-grey.svg';
+
+    var imagesPool = document.querySelectorAll('.ad-form__photo');
+    imagesPool.forEach(function (it) {
+      it.remove();
+    });
+
+    var emptyImageElement = document.createElement('div');
+    emptyImageElement.classList.add('ad-form__photo');
+    var actualContainer = adForm.querySelector('.ad-form__photo-container');
+    actualContainer.appendChild(emptyImageElement);
+
     window.objects.removePins();
     pinMain.addEventListener('click', window.form.inicializationApp);
 

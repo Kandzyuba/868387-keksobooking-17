@@ -15,7 +15,6 @@
     newPin.style.left = dataArr.location.x + 'px';
     newPin.style.top = dataArr.location.y + 'px';
     newPin.querySelector('img').alt = dataArr.offer.type;
-    // var mapPin = document.querySelector('.map__pin:not(.map__pin--main)');
 
     newPin.addEventListener('click', function () {
       if (map.lastChild !== map.querySelector('.map__card')) {
